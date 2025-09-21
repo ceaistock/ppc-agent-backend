@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <body style="font-family: Arial; padding: 24px;">
+    <h2>Test Upload to PPC Agent</h2>
+    <form id="f">
+      <input type="file" id="file" accept=".csv,.xls,.xlsx" /><br/><br/>
+      Platform:
+      <select id="platform">
+        <option value="google">google</option>
+        <option value="meta">meta</option>
+      </select><br/><br/>
+      <button type="button" onclick="upload()">Upload</button>
+    </form>
+    <pre id="out"></pre>
+
+    <script>
+      async function upload() {
+        const f = document.getElementById('file').files[0];
+        if (!f) { alert("Choose a file"); return; }
+        const form = new FormData();
+        form.append("file", f);
+        form.append("platform", document.getElementById('platform').value);
+
+        // change URL for deployed app
+        const url = "http://localhost:8000/upload";
+        const res = await fetch(url, { method: "POST", body: form });
+        const json = await res.json();
+        document.getElementById('out').textContent = JSON.stringify(json, null, 2);
+      }
+    </script>
+  </body>
+</html>
